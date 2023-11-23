@@ -1,6 +1,6 @@
 package com.vsened.bookingapp.domain.usecase
 
-import com.vsened.bookingapp.domain.data.Customer
+import com.vsened.bookingapp.domain.model.Customer
 import com.vsened.bookingapp.domain.repository.Repository
 
 class AddCustomerUseCase(

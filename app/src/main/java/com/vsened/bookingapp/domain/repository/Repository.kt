@@ -1,10 +1,10 @@
 package com.vsened.bookingapp.domain.repository
 
-import com.vsened.bookingapp.domain.data.Customer
-import com.vsened.bookingapp.domain.data.Hotel
-import com.vsened.bookingapp.domain.data.Order
-import com.vsened.bookingapp.domain.data.Room
-import com.vsened.bookingapp.domain.data.Tourist
+import com.vsened.bookingapp.domain.model.Customer
+import com.vsened.bookingapp.domain.model.Hotel
+import com.vsened.bookingapp.domain.model.Order
+import com.vsened.bookingapp.domain.model.Room
+import com.vsened.bookingapp.domain.model.Tourist
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
