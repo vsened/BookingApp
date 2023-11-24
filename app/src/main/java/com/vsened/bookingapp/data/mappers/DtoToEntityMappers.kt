@@ -25,10 +25,14 @@ fun HotelDto.toHotelEntity(): HotelEntity {
 }
 
 fun RoomDto.toRoomEntity() = RoomEntity(
+    id = id,
     name = name,
     tags = tags,
     description = description,
     price = price,
     period = period,
-    images = images
+    images = images,
+    startPoint = startPoint,
+    endPoint = endPoint,
+    dates = dates
 )

@@ -5,7 +5,6 @@ import com.vsened.bookingapp.data.local.model.HotelEntity
 import com.vsened.bookingapp.data.local.model.OrderEntity
 import com.vsened.bookingapp.data.local.model.RoomEntity
 import com.vsened.bookingapp.data.local.model.TouristEntity
-import com.vsened.bookingapp.data.mappers.toRoomDto
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -45,12 +44,17 @@ class AppDatabase @Inject constructor() {
         emit(rooms)
     }
 
-    suspend fun getRoomById(name: String): RoomEntity? {
-        return coroutineScope {
-            return@coroutineScope rooms.find {
-                it.name == name
+    suspend fun getRoomByName(id: String): RoomEntity? {
+        var result: RoomEntity? = null
+        coroutineScope {
+            rooms.forEach {
+                if (it.id == id) {
+                    result = it
+                    return@coroutineScope
+                }
             }
         }
+        return result
     }
 
     suspend fun addCustomer(customer: CustomerEntity) {

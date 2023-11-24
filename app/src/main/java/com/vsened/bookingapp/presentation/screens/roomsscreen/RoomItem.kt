@@ -29,13 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import com.vsened.bookingapp.R
+import com.vsened.bookingapp.domain.model.Room
 import com.vsened.bookingapp.presentation.screens.utils.ImageSlider
 import com.vsened.bookingapp.presentation.ui.theme.ButtonBackground
 import com.vsened.bookingapp.presentation.ui.theme.sanFrancisco
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RoomItem(onClick: () -> Unit) {
+fun RoomItem(
+    room: Room,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -43,16 +47,10 @@ fun RoomItem(onClick: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         ImageSlider(
-            hotels = listOf(
-                R.drawable.room_0,
-                R.drawable.room_1,
-                R.drawable.room_2,
-                R.drawable.room_3,
-                R.drawable.room_4,
-            )
+            room.images
         )
         Text(
-            text = "Стандартный с видом на бассейн или сад",
+            text = room.name,
             fontFamily = sanFrancisco,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
             fontWeight = FontWeight.Medium,
@@ -65,10 +63,7 @@ fun RoomItem(onClick: () -> Unit) {
             mainAxisSpacing = 10.dp,
             crossAxisSpacing = 10.dp,
         ) {
-            listOf(
-                "Все включено",
-                "Кондиционер"
-            ).forEach {
+            room.tags.forEach {
                 Text(
                     modifier = Modifier
                         .clip(RoundedCornerShape(3.dp))
@@ -107,14 +102,14 @@ fun RoomItem(onClick: () -> Unit) {
             verticalAlignment = Alignment.Bottom
         ) {
             Text(
-                text = "186 000 ₽",
+                text = "${room.price / 1000} ${room.price % 1000} ₽",
                 fontFamily = sanFrancisco,
                 fontWeight = FontWeight.Medium,
                 fontSize = 30.sp
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text = "за 7 ночей с перелётом",
+                text = room.period,
                 fontFamily = sanFrancisco,
                 fontSize = 16.sp,
                 color = Color(0xFF828796),
@@ -143,10 +138,3 @@ fun RoomItem(onClick: () -> Unit) {
         Spacer(modifier = Modifier.height(15.dp))
     }
 }
-
-
-//@Preview
-//@Composable
-//fun RoomItemPreview() {
-//    RoomItem()
-//}

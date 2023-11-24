@@ -5,10 +5,10 @@ import com.vsened.bookingapp.domain.repository.Repository
 import com.vsened.bookingapp.presentation.Resource
 import javax.inject.Inject
 
-class GetRoomByName @Inject constructor(
+class GetRoomById @Inject constructor(
     private val repository: Repository
 ) {
     suspend operator fun invoke(name: String): Resource<Room> {
-        return repository.getRoomByName(name)
+        return repository.getRoomById(name)
     }
 }

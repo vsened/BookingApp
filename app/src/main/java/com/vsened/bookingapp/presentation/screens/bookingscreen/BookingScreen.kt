@@ -1,5 +1,6 @@
 package com.vsened.bookingapp.presentation.screens.bookingscreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,33 +44,47 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vsened.bookingapp.R
+import com.vsened.bookingapp.domain.model.Tourist
 import com.vsened.bookingapp.presentation.Screen
 import com.vsened.bookingapp.presentation.screens.utils.UserRating
 import com.vsened.bookingapp.presentation.ui.theme.ButtonBackground
 import com.vsened.bookingapp.presentation.ui.theme.sanFrancisco
 
+
+@SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookingScreen(navController: NavController) {
+fun BookingScreen(
+    navController: NavController,
+    roomId: String,
+    viewModel: BookingViewModel = hiltViewModel()
+) {
+
+    viewModel.getRoom(roomId)
+    val state = viewModel.state
+
     var phoneNumber by remember {
         mutableStateOf("")
     }
     var email by remember {
         mutableStateOf("")
     }
+    var firstTourist by remember {
+        mutableStateOf(Tourist())
+    }
+    var secondTourist by remember {
+        mutableStateOf(Tourist())
+    }
     var isFirstTouristVisible by remember {
-            mutableStateOf(true)
+        mutableStateOf(true)
     }
     var isSecondTouristVisible by remember {
         mutableStateOf(false)
-    }
-    var tourists by remember {
-        mutableStateOf(mutableListOf(""))
     }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -117,9 +133,9 @@ fun BookingScreen(navController: NavController) {
                 )
             }
         }
-    ) {
+    ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(paddingValues)
         ) {
             item {
                 Card(
@@ -130,19 +146,20 @@ fun BookingScreen(navController: NavController) {
                         containerColor = Color.White,
                     )
                 ) {
-                    UserRating("5")
-                    Spacer(Modifier.height(3.dp))
+                    Spacer(Modifier.height(10.dp))
+                    UserRating(state.hotel?.rating ?: "")
+                    Spacer(Modifier.height(8.dp))
                     Text(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                        text = "Steigenberger Makadi",
+                        text = state.hotel?.name ?: "",
                         fontFamily = sanFrancisco,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Medium
                     )
-                    Spacer(Modifier.height(3.dp))
+                    Spacer(Modifier.height(8.dp))
                     Text(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                        text = "Madinat Makadi, Safaga Road, Makadi Bay, Египет",
+                        text = state.hotel?.address ?: "",
                         fontFamily = sanFrancisco,
                         color = Color(0xFF0D72FF)
                     )
@@ -173,7 +190,7 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "Санкт-Петербург",
+                            text = state.room?.startPoint ?: "",
                             modifier = Modifier.weight(4f),
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
@@ -194,7 +211,7 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "Египет, Хургада",
+                            text = state.room?.endPoint ?: "",
                             modifier = Modifier.weight(4f),
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
@@ -215,7 +232,7 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "19.09.2023 — 27.09.2023",
+                            text = state.room?.dates ?: "",
                             modifier = Modifier.weight(4f),
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
@@ -235,8 +252,9 @@ fun BookingScreen(navController: NavController) {
                             color = Color(0xFF828796)
 
                         )
+                        val nights = state.room?.period?.split(' ')?.get(1) ?: 7
                         Text(
-                            text = "7 ночей",
+                            text = "$nights ночей",
                             modifier = Modifier.weight(4f),
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
@@ -257,7 +275,7 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "Steigenberger Makadi",
+                            text = state.hotel?.name ?: "",
                             modifier = Modifier.weight(4f),
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
@@ -278,7 +296,7 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "Стандартный с видом на бассейн или сад",
+                            text = state.room?.name ?: "",
                             modifier = Modifier.weight(4f),
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
@@ -299,7 +317,7 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "Всё включено",
+                            text = state.hotel?.nutrition ?: "",
                             modifier = Modifier.weight(4f),
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
@@ -360,7 +378,8 @@ fun BookingScreen(navController: NavController) {
                             disabledIndicatorColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
-                        )
+                        ),
+                        maxLines = 1
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
@@ -420,9 +439,11 @@ fun BookingScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(10.dp))
                     if (isFirstTouristVisible) {
                         TextField(
-                            value = email,
-                            onValueChange = { it ->
-                                email = it
+                            value = firstTourist.name,
+                            onValueChange = { name: String ->
+                                firstTourist = firstTourist.copy(
+                                    name = name
+                                )
                             },
                             label = {
                                 Text(
@@ -441,13 +462,16 @@ fun BookingScreen(navController: NavController) {
                                 disabledIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
-                            )
+                            ),
+                            maxLines = 1
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         TextField(
-                            value = email,
+                            value = firstTourist.surname,
                             onValueChange = { it ->
-                                email = it
+                                firstTourist = firstTourist.copy(
+                                    surname = it
+                                )
                             },
                             label = {
                                 Text(
@@ -466,13 +490,14 @@ fun BookingScreen(navController: NavController) {
                                 disabledIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
-                            )
+                            ),
+                            maxLines = 1
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         MaskField(
-                            phone = phoneNumber,
+                            phone = firstTourist.dateOfBirth,
                             onPhoneChanged = {
-                                phoneNumber = it
+                                firstTourist = firstTourist.copy(dateOfBirth = it)
                             },
                             mask = "00.00.0000г.",
                             maskNumber = '0',
@@ -480,9 +505,9 @@ fun BookingScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         TextField(
-                            value = email,
-                            onValueChange = { it ->
-                                email = it
+                            value = firstTourist.citizenOf,
+                            onValueChange = { it: String ->
+                                firstTourist = firstTourist.copy(citizenOf = it)
                             },
                             label = {
                                 Text(
@@ -501,13 +526,14 @@ fun BookingScreen(navController: NavController) {
                                 disabledIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
-                            )
+                            ),
+                            maxLines = 1
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         MaskField(
-                            phone = phoneNumber,
+                            phone = firstTourist.passportId,
                             onPhoneChanged = {
-                                phoneNumber = it
+                                firstTourist = firstTourist.copy(passportId = it)
                             },
                             mask = "00 0000000",
                             maskNumber = '0',
@@ -515,11 +541,12 @@ fun BookingScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         MaskField(
-                            phone = phoneNumber,
+                            phone = firstTourist.passportValidityPeriod,
                             onPhoneChanged = {
-                                phoneNumber = it
+                                firstTourist =
+                                    firstTourist.copy(passportValidityPeriod = it)
                             },
-                            mask = "00.00.0000г.",
+                            mask = "00.00.0000",
                             maskNumber = '0',
                             label = "Срок действия загранпаспорта"
                         )
@@ -574,9 +601,11 @@ fun BookingScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(10.dp))
                     if (isSecondTouristVisible) {
                         TextField(
-                            value = email,
-                            onValueChange = { it ->
-                                email = it
+                            value = secondTourist.name,
+                            onValueChange = { name: String ->
+                                secondTourist = secondTourist.copy(
+                                    name = name
+                                )
                             },
                             label = {
                                 Text(
@@ -595,13 +624,16 @@ fun BookingScreen(navController: NavController) {
                                 disabledIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
-                            )
+                            ),
+                            maxLines = 1
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         TextField(
-                            value = email,
+                            value = secondTourist.surname,
                             onValueChange = { it ->
-                                email = it
+                                secondTourist = secondTourist.copy(
+                                    surname = it
+                                )
                             },
                             label = {
                                 Text(
@@ -620,13 +652,14 @@ fun BookingScreen(navController: NavController) {
                                 disabledIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
-                            )
+                            ),
+                            maxLines = 1
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         MaskField(
-                            phone = phoneNumber,
+                            phone = secondTourist.dateOfBirth,
                             onPhoneChanged = {
-                                phoneNumber = it
+                                secondTourist = secondTourist.copy(dateOfBirth = it)
                             },
                             mask = "00.00.0000г.",
                             maskNumber = '0',
@@ -634,9 +667,9 @@ fun BookingScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         TextField(
-                            value = email,
-                            onValueChange = { it ->
-                                email = it
+                            value = secondTourist.citizenOf,
+                            onValueChange = { it: String ->
+                                secondTourist = secondTourist.copy(citizenOf = it)
                             },
                             label = {
                                 Text(
@@ -655,13 +688,14 @@ fun BookingScreen(navController: NavController) {
                                 disabledIndicatorColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent
-                            )
+                            ),
+                            maxLines = 1
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         MaskField(
-                            phone = phoneNumber,
+                            phone = secondTourist.passportId,
                             onPhoneChanged = {
-                                phoneNumber = it
+                                secondTourist = secondTourist.copy(passportId = it)
                             },
                             mask = "00 0000000",
                             maskNumber = '0',
@@ -669,11 +703,12 @@ fun BookingScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         MaskField(
-                            phone = phoneNumber,
+                            phone = secondTourist.passportValidityPeriod,
                             onPhoneChanged = {
-                                phoneNumber = it
+                                secondTourist =
+                                    secondTourist.copy(passportValidityPeriod = it)
                             },
-                            mask = "00.00.0000г.",
+                            mask = "00.00.0000",
                             maskNumber = '0',
                             label = "Срок действия загранпаспорта"
                         )
@@ -700,7 +735,7 @@ fun BookingScreen(navController: NavController) {
                         Text(
                             modifier = Modifier
                                 .weight(1f),
-                            text = "Второй турист",
+                            text = "Дополнительный турист",
                             fontFamily = sanFrancisco,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Medium,
@@ -711,7 +746,7 @@ fun BookingScreen(navController: NavController) {
                                 .clip(RoundedCornerShape(2.dp))
                                 .background(Color(0xFF0D72FF))
                                 .clickable {
-                                    tourists.add("")
+                                    viewModel.addTourist(Tourist())
                                 },
                             contentAlignment = Alignment.Center
                         ) {
@@ -720,162 +755,6 @@ fun BookingScreen(navController: NavController) {
                                 contentDescription = "Add tourist info",
                                 tint = Color.White
                             )
-                        }
-                    }
-                }
-            }
-            if (tourists.isNotEmpty()) {
-                items(tourists.size) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White,
-                        )
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .weight(1f),
-                                text = "Второй турист",
-                                fontFamily = sanFrancisco,
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Medium,
-                            )
-                            Box(
-                                modifier = Modifier
-                                    .size(30.dp)
-                                    .clip(RoundedCornerShape(2.dp))
-                                    .background(Color(0x1A0D72FF))
-                                    .clickable {
-                                        isSecondTouristVisible = !isSecondTouristVisible
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(
-                                        if (isSecondTouristVisible) R.drawable.arrow_up else
-                                            R.drawable.arrow_down
-                                    ),
-                                    contentDescription = "Show touirist info",
-                                    tint = Color(0xFF0D72FF)
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        if (isSecondTouristVisible) {
-                            TextField(
-                                value = email,
-                                onValueChange = { it ->
-                                    email = it
-                                },
-                                label = {
-                                    Text(
-                                        text = "Имя",
-                                        fontFamily = sanFrancisco,
-                                        color = Color(0xFFA9ABB7)
-                                    )
-                                },
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 16.dp, end = 16.dp),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    containerColor = Color(0xFFF6F6F9),
-                                    disabledIndicatorColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent
-                                )
-                            )
-                            Spacer(modifier = Modifier.height(5.dp))
-                            TextField(
-                                value = email,
-                                onValueChange = { it ->
-                                    email = it
-                                },
-                                label = {
-                                    Text(
-                                        text = "Фамилия",
-                                        fontFamily = sanFrancisco,
-                                        color = Color(0xFFA9ABB7)
-                                    )
-                                },
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 16.dp, end = 16.dp),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    containerColor = Color(0xFFF6F6F9),
-                                    disabledIndicatorColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent
-                                )
-                            )
-                            Spacer(modifier = Modifier.height(5.dp))
-                            MaskField(
-                                phone = phoneNumber,
-                                onPhoneChanged = {
-                                    phoneNumber = it
-                                },
-                                mask = "00.00.0000г.",
-                                maskNumber = '0',
-                                label = "Дата рождения"
-                            )
-                            Spacer(modifier = Modifier.height(5.dp))
-                            TextField(
-                                value = email,
-                                onValueChange = { it ->
-                                    email = it
-                                },
-                                label = {
-                                    Text(
-                                        text = "Гражданство",
-                                        fontFamily = sanFrancisco,
-                                        color = Color(0xFFA9ABB7)
-                                    )
-                                },
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 16.dp, end = 16.dp),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    containerColor = Color(0xFFF6F6F9),
-                                    disabledIndicatorColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent
-                                )
-                            )
-                            Spacer(modifier = Modifier.height(5.dp))
-                            MaskField(
-                                phone = phoneNumber,
-                                onPhoneChanged = {
-                                    phoneNumber = it
-                                },
-                                mask = "00 0000000",
-                                maskNumber = '0',
-                                label = "Номер загранпаспорта"
-                            )
-                            Spacer(modifier = Modifier.height(5.dp))
-                            MaskField(
-                                phone = phoneNumber,
-                                onPhoneChanged = {
-                                    phoneNumber = it
-                                },
-                                mask = "00.00.0000г.",
-                                maskNumber = '0',
-                                label = "Срок действия загранпаспорта"
-                            )
-                            Spacer(modifier = Modifier.height(5.dp))
                         }
                     }
                 }
@@ -904,7 +783,7 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "__ ₽",
+                            text = "${state.room!!.price / 1000} ${state.room!!.price % 1000} ₽",
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
@@ -924,7 +803,8 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "__ ₽",
+                            text = "${state.hotel!!.fuelSurcharge / 1000} " +
+                                    "${state.hotel!!.fuelSurcharge % 1000} ₽",
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
@@ -944,7 +824,8 @@ fun BookingScreen(navController: NavController) {
 
                         )
                         Text(
-                            text = "__ ₽",
+                            text = "${state.hotel!!.serviceSurcharge / 1000} " +
+                                    "${state.hotel!!.serviceSurcharge % 1000} ₽",
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
@@ -963,8 +844,13 @@ fun BookingScreen(navController: NavController) {
                             color = Color(0xFF828796)
 
                         )
+                        val totalPrice = state.room!!.price +
+                                state.hotel!!.fuelSurcharge +
+                                state.hotel!!.serviceSurcharge
                         Text(
-                            text = "__ ₽",
+                            text = "${totalPrice / 1000} " +
+                                    "${if (totalPrice % 1000 > 100) totalPrice % 1000 
+                                    else "0${totalPrice % 1000}"} ₽",
                             fontFamily = sanFrancisco,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
@@ -1074,4 +960,9 @@ private class PhoneOffsetMapper(val mask: String, val numberChar: Char) : Offset
 
     override fun transformedToOriginal(offset: Int): Int =
         offset - mask.take(offset).count { it != numberChar }
+}
+
+fun <T> SnapshotStateList<T>.swapList(newList: List<T>) {
+    clear()
+    addAll(newList)
 }

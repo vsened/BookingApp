@@ -10,9 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.vsened.bookingapp.presentation.screens.bookingscreen.BookingScreen
 import com.vsened.bookingapp.presentation.screens.hotelscreen.HotelScreen
 import com.vsened.bookingapp.presentation.screens.paidorderscreen.PaidOrderScreen
@@ -46,8 +48,18 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(
                             route = Screen.BookingScreen.route
+                            + "?roomName={roomId}",
+                            arguments = listOf(
+                                navArgument(
+                                    name = "roomId"
+                                ) {
+                                    type = NavType.StringType
+                                    defaultValue = ""
+                                }
+                            )
                         ) {
-                            BookingScreen(navController = navController)
+                            val roomId = it.arguments?.getString("roomId") ?: ""
+                            BookingScreen(navController = navController, roomId)
                         }
                         composable(
                             route = Screen.PaidOrderScreen.route
