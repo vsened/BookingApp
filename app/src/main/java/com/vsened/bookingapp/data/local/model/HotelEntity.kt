@@ -1,8 +1,6 @@
 package com.vsened.bookingapp.data.local.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-@Entity
+
 data class HotelEntity(
     val name: String,
     val rating: String,
@@ -16,5 +14,5 @@ data class HotelEntity(
     val nutrition: String,
     val fuelSurcharge: Int,
     val serviceSurcharge: Int,
-    @PrimaryKey val id: Int? = null
+    val images: List<Int>
 )

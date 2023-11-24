@@ -21,7 +21,7 @@ import com.vsened.bookingapp.R
 import com.vsened.bookingapp.presentation.ui.theme.sanFrancisco
 
 @Composable
-fun UserRating() {
+fun UserRating(rating: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -37,7 +37,7 @@ fun UserRating() {
         )
         Spacer(modifier = Modifier.width(5.dp))
         Text(
-            text = "5 Превосходно",
+            text = rating,
             fontFamily = sanFrancisco,
             fontSize = 16.sp,
             color = Color(0xFFFFA800)
@@ -47,8 +47,3 @@ fun UserRating() {
 
 
 
-@Preview
-@Composable
-fun UserRatingPreview() {
-    UserRating()
-}

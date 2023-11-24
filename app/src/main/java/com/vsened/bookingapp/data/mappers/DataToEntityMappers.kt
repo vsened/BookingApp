@@ -11,11 +11,11 @@ import com.vsened.bookingapp.domain.model.Order
 import com.vsened.bookingapp.domain.model.Room
 import com.vsened.bookingapp.domain.model.Tourist
 
-fun CustomerEntity.toCustomer() = Customer(
+fun Customer.toCustomerEntity() = CustomerEntity(
     phoneNumber = phoneNumber,
     email = email
 )
-fun HotelEntity.toHotel() = Hotel(
+fun Hotel.toHotelEntity() = HotelEntity(
     name = name,
     rating = rating,
     address = address,
@@ -31,7 +31,7 @@ fun HotelEntity.toHotel() = Hotel(
     images = images
 )
 
-fun RoomEntity.toRoom() = Room(
+fun Room.toRoomEntity() = RoomEntity(
     name = name,
     tags = tags,
     description = description,
@@ -40,18 +40,18 @@ fun RoomEntity.toRoom() = Room(
     images = images
 )
 
-fun OrderEntity.toOrder() = Order(
-    customer = customer.toCustomer(),
-    hotel = hotel.toHotel(),
-    room = room.toRoom(),
+fun Order.toOrderEntity() = OrderEntity(
+    customer = customer.toCustomerEntity(),
+    hotel = hotel.toHotelEntity(),
+    room = room.toRoomEntity(),
     price = price,
     startPoint = startPoint,
     endPoint = endPoint,
     period = period,
-    tourists = tourists.map { it.toTourist() }
+    tourists = tourists.map { it.toTouristEntity() }
 )
 
-fun TouristEntity.toTourist() = Tourist(
+fun Tourist.toTouristEntity() = TouristEntity(
     name = name,
     surname = surname,
     dateOfBirth = dateOfBirth,

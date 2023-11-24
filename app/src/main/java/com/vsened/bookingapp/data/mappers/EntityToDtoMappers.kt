@@ -27,7 +27,8 @@ fun HotelEntity.toHotelDto() = HotelDto(
     notInclude = notInclude,
     nutrition = nutrition,
     fuelSurcharge = fuelSurcharge,
-    serviceSurcharge = serviceSurcharge
+    serviceSurcharge = serviceSurcharge,
+    images = images
 )
 
 fun RoomEntity.toRoomDto() = RoomDto(
@@ -36,6 +37,7 @@ fun RoomEntity.toRoomDto() = RoomDto(
     description = description,
     price = price,
     period = period,
+    images = images
 )
 
 fun OrderEntity.toOrderDto() = OrderDto(

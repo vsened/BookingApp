@@ -12,5 +12,6 @@ data class HotelDto(
     val notInclude: String,
     val nutrition: String,
     val fuelSurcharge: Int,
-    val serviceSurcharge: Int
+    val serviceSurcharge: Int,
+    val images: List<Int>
 )

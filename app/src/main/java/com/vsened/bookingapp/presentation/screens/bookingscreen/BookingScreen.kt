@@ -130,7 +130,7 @@ fun BookingScreen(navController: NavController) {
                         containerColor = Color.White,
                     )
                 ) {
-                    UserRating()
+                    UserRating("5")
                     Spacer(Modifier.height(3.dp))
                     Text(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp),

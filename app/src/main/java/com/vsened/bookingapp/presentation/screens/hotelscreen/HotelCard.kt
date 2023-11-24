@@ -29,17 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import com.vsened.bookingapp.R
+import com.vsened.bookingapp.domain.model.Hotel
 import com.vsened.bookingapp.presentation.screens.utils.Tag
 import com.vsened.bookingapp.presentation.ui.theme.sanFrancisco
 
 @Composable
-fun HotelCard() {
-    val tags = listOf(
-        "3-я линия",
-        "Платный Wi-Fi в фойе",
-        "30 км от аэропорта",
-        "1 км от пляжа"
-    )
+fun HotelCard(hotel: Hotel) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -62,12 +57,12 @@ fun HotelCard() {
             mainAxisSpacing = 10.dp,
             crossAxisSpacing = 10.dp,
         ) {
-            tags.forEach { tag ->
+            hotel.tags.forEach { tag ->
                 Tag(tag = tag)
             }
         }
         Text(
-            text = "Отель VIP-класса с собственными гольф полями. Высокий уровнь сервиса. Рекомендуем для респектабельного отдыха. Отель принимает гостей от 18 лет!",
+            text = hotel.description,
             fontFamily = sanFrancisco,
             fontSize = 17.sp,
             modifier = Modifier.padding(16.dp)
@@ -98,7 +93,7 @@ fun HotelCard() {
                             fontFamily = sanFrancisco
                         )
                         Text(
-                            text = "Самое необходимое",
+                            text = hotel.conveniences,
                             fontFamily = sanFrancisco,
                             color =  Color(0xFF828796),
                             fontSize = 12.sp
@@ -126,7 +121,7 @@ fun HotelCard() {
                             fontFamily = sanFrancisco
                         )
                         Text(
-                            text = "Самое необходимое",
+                            text = hotel.include,
                             fontFamily = sanFrancisco,
                             color =  Color(0xFF828796),
                             fontSize = 12.sp
@@ -154,7 +149,7 @@ fun HotelCard() {
                             fontFamily = sanFrancisco
                         )
                         Text(
-                            text = "Самое необходимое",
+                            text = hotel.notInclude,
                             fontFamily = sanFrancisco,
                             color =  Color(0xFF828796),
                             fontSize = 12.sp
@@ -169,11 +164,5 @@ fun HotelCard() {
 
         Spacer(modifier = Modifier.height(16.dp))
     }
-}
-
-@Preview
-@Composable
-fun HotelCardPreview() {
-    HotelCard()
 }
 
