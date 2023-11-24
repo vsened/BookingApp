@@ -30,7 +30,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -864,12 +863,6 @@ fun BookingScreen(
     }
 }
 
-//@Preview
-//@Composable
-//fun BookingScreenPreview() {
-//    BookingScreen()
-//}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MaskField(
@@ -960,9 +953,4 @@ private class PhoneOffsetMapper(val mask: String, val numberChar: Char) : Offset
 
     override fun transformedToOriginal(offset: Int): Int =
         offset - mask.take(offset).count { it != numberChar }
-}
-
-fun <T> SnapshotStateList<T>.swapList(newList: List<T>) {
-    clear()
-    addAll(newList)
 }

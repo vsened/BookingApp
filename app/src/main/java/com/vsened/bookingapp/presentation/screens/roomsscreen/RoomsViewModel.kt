@@ -1,6 +1,5 @@
 package com.vsened.bookingapp.presentation.screens.roomsscreen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -43,7 +42,6 @@ class RoomsViewModel @Inject constructor(
                         )
                     }
                     is Resource.Success -> {
-                        Log.d("RoomsViewModel", "getRooms: ${result.data.toString()} ${System.currentTimeMillis()}")
                         result.data?.let {
                             state = state.copy(
                                 rooms = it,

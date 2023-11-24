@@ -1,6 +1,5 @@
 package com.vsened.bookingapp.presentation.screens.bookingscreen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,7 +25,6 @@ class BookingViewModel @Inject constructor(
     }
 
     fun getRoom(roomId: String) {
-        Log.d("BookingViewModel", "Start getRoom: $roomId")
         viewModelScope.launch {
             state = state.copy(
                 isLoading = true
@@ -46,7 +44,6 @@ class BookingViewModel @Inject constructor(
                         room = result.data,
                         shouldRefresh = true
                     )
-                    Log.d("BookingViewModel", "Success getRoom: $result")
                 }
             }
         }
