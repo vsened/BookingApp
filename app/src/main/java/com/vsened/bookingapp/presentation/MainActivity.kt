@@ -18,7 +18,9 @@ import com.vsened.bookingapp.presentation.screens.hotelscreen.HotelScreen
 import com.vsened.bookingapp.presentation.screens.paidorderscreen.PaidOrderScreen
 import com.vsened.bookingapp.presentation.screens.roomsscreen.RoomsScreen
 import com.vsened.bookingapp.presentation.ui.theme.BookingAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
