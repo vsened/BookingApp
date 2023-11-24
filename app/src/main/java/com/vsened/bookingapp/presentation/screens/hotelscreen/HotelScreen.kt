@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -111,76 +112,80 @@ fun HotelScreen(
                 }
             )
         } else {
-            state.hotel?.let { hotel ->
-                LazyColumn(
-                    modifier = Modifier.padding(paddingValues)
-                ) {
-                    item {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color.White,
-                            )
-                        ) {
-                            Text(
+            if (state.isLoading) {
+                CircularProgressIndicator()
+            } else {
+                state.hotel?.let { hotel ->
+                    LazyColumn(
+                        modifier = Modifier.padding(paddingValues)
+                    ) {
+                        item {
+                            Card(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 15.dp),
-                                text = "Отель",
-                                fontFamily = sanFrancisco,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Medium,
-                                textAlign = TextAlign.Center,
-                            )
-                            Spacer(modifier = Modifier.height(10.dp))
-                            ImageSlider(hotel.images)
-                            Spacer(Modifier.height(10.dp))
-                            UserRating(hotel.rating)
-                            Spacer(Modifier.height(3.dp))
-                            Text(
-                                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                                text = hotel.name,
-                                fontFamily = sanFrancisco,
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                            Spacer(Modifier.height(3.dp))
-                            Text(
-                                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                                text = hotel.address,
-                                fontFamily = sanFrancisco,
-                                color = Color(0xFF0D72FF)
-                            )
-                            Spacer(Modifier.height(10.dp))
-                            Row(
-                                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.Bottom
+                                    .fillMaxWidth(),
+                                shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color.White,
+                                )
                             ) {
                                 Text(
-                                    text = "от ${hotel.minPrice / 1000} ${hotel.minPrice % 1000} ₽",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 15.dp),
+                                    text = "Отель",
                                     fontFamily = sanFrancisco,
+                                    fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium,
-                                    fontSize = 30.sp
+                                    textAlign = TextAlign.Center,
                                 )
-                                Spacer(modifier = Modifier.width(5.dp))
+                                Spacer(modifier = Modifier.height(10.dp))
+                                ImageSlider(hotel.images)
+                                Spacer(Modifier.height(10.dp))
+                                UserRating(hotel.rating)
+                                Spacer(Modifier.height(3.dp))
                                 Text(
-                                    text = "за тур с перелётом",
+                                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                                    text = hotel.name,
                                     fontFamily = sanFrancisco,
-                                    fontSize = 16.sp,
-                                    color = Color(0xFF828796),
-                                    modifier = Modifier.padding(bottom = 4.dp)
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Medium
                                 )
+                                Spacer(Modifier.height(3.dp))
+                                Text(
+                                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                                    text = hotel.address,
+                                    fontFamily = sanFrancisco,
+                                    color = Color(0xFF0D72FF)
+                                )
+                                Spacer(Modifier.height(10.dp))
+                                Row(
+                                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                                    horizontalArrangement = Arrangement.Start,
+                                    verticalAlignment = Alignment.Bottom
+                                ) {
+                                    Text(
+                                        text = "от ${hotel.minPrice / 1000} ${hotel.minPrice % 1000} ₽",
+                                        fontFamily = sanFrancisco,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 30.sp
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text(
+                                        text = "за тур с перелётом",
+                                        fontFamily = sanFrancisco,
+                                        fontSize = 16.sp,
+                                        color = Color(0xFF828796),
+                                        modifier = Modifier.padding(bottom = 4.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(15.dp))
                             }
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(7.dp))
                         }
-                        Spacer(modifier = Modifier.height(7.dp))
-                    }
-                    item {
-                        HotelCard(hotel)
-                        Spacer(modifier = Modifier.height(10.dp))
+                        item {
+                            HotelCard(hotel)
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
                     }
                 }
             }

@@ -13,7 +13,7 @@ interface Repository {
 
     suspend fun getRooms(hotelId: Int): Flow<Resource<List<Room>>>
 
-    suspend fun getRoomByName(name: String): Resource<Room>
+    suspend fun getRoomById(id: String): Resource<Room>
 
     suspend fun addCustomer(customer: Customer)
 

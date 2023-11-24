@@ -1,5 +1,6 @@
 package com.vsened.bookingapp.data.mappers
 
+import com.vsened.bookingapp.data.local.AppDatabase
 import com.vsened.bookingapp.data.local.model.CustomerEntity
 import com.vsened.bookingapp.data.local.model.HotelEntity
 import com.vsened.bookingapp.data.local.model.OrderEntity
@@ -10,11 +11,13 @@ import com.vsened.bookingapp.domain.model.Hotel
 import com.vsened.bookingapp.domain.model.Order
 import com.vsened.bookingapp.domain.model.Room
 import com.vsened.bookingapp.domain.model.Tourist
+import kotlin.random.Random
 
 fun Customer.toCustomerEntity() = CustomerEntity(
     phoneNumber = phoneNumber,
     email = email
 )
+
 fun Hotel.toHotelEntity() = HotelEntity(
     name = name,
     rating = rating,
@@ -32,12 +35,16 @@ fun Hotel.toHotelEntity() = HotelEntity(
 )
 
 fun Room.toRoomEntity() = RoomEntity(
+    id = id,
     name = name,
     tags = tags,
     description = description,
     price = price,
     period = period,
-    images = images
+    images = images,
+    startPoint = startPoint,
+    endPoint = endPoint,
+    dates = dates
 )
 
 fun Order.toOrderEntity() = OrderEntity(

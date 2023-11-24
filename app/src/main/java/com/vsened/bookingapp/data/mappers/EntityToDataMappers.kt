@@ -32,12 +32,16 @@ fun HotelEntity.toHotel() = Hotel(
 )
 
 fun RoomEntity.toRoom() = Room(
+    id = id,
     name = name,
     tags = tags,
     description = description,
     price = price,
     period = period,
-    images = images
+    images = images,
+    startPoint = startPoint,
+    endPoint = endPoint,
+    dates = dates
 )
 
 fun OrderEntity.toOrder() = Order(

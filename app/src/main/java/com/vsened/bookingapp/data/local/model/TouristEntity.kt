@@ -6,6 +6,6 @@ data class TouristEntity(
     val surname: String,
     val dateOfBirth: String,
     val citizenOf: String,
-    val passportId: Int,
+    val passportId: String,
     val passportValidityPeriod: String
 )

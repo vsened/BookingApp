@@ -49,8 +49,8 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRoomByName(name: String): Resource<Room> {
-        val result = appDatabase.getRoomById(name)
+    override suspend fun getRoomById(id: String): Resource<Room> {
+        val result = appDatabase.getRoomByName(id)
         return if (result != null) {
             Resource.Success(result.toRoom())
         } else {
